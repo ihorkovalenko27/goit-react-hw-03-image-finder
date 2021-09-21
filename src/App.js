@@ -19,11 +19,7 @@ class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.searchName !== this.state.searchName) {
-      this.setState({ images: [] });
-      this.fetchImages();
-    }
-    if (prevState.currentpage !== this.state.currentpage) {
-      this.fetchImages();
+      this.setState({ images: [], currentpage: 1 }, () => this.fetchImages());
     }
   }
 
@@ -52,18 +48,13 @@ class App extends Component {
         }
         this.setState(prevState => ({
           images: [...prevState.images, ...data.hits],
+          currentpage: prevState.currentpage + 1,
         }));
         if (currentpage > 1) {
           this.autoScroll();
         }
       })
       .finally(() => this.setState({ loading: false }));
-  };
-
-  loadMore = () => {
-    this.setState(prevState => ({
-      currentpage: prevState.currentpage + 1,
-    }));
   };
 
   autoScroll = () => {
@@ -81,7 +72,7 @@ class App extends Component {
         <Searchbar onSubmit={this.handleFormSubmit} />
         {loading && <Spinner />}
         <ImageGallery images={images} onPicked={this.handlePickedImage} />
-        {visibleLoadmore && <Button onClick={this.loadMore} onLoading={loading} />}
+        {visibleLoadmore && <Button onClick={this.fetchImages} onLoading={loading} />}
         {pickedImage && <Modal src={pickedImage} closeModal={this.handleCloseModal} />}
         <ToastContainer autoClose={2000} />
       </>
