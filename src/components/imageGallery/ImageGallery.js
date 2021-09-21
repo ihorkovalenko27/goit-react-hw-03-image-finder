@@ -7,11 +7,12 @@ const ImageGallery = ({ images, onPicked }) => {
     <ul className={s.ImageGallery}>
       {images &&
         images.map(({ id, webformatURL, largeImageURL, tags }) => {
+          const selectImage = () => onPicked(largeImageURL);
           return (
             <ImagesGalleryItem
               key={id}
               webformatURL={webformatURL}
-              onPicked={() => onPicked(largeImageURL)}
+              onPicked={selectImage}
               tags={tags}
             />
           );

@@ -53,7 +53,9 @@ class App extends Component {
         this.setState(prevState => ({
           images: [...prevState.images, ...data.hits],
         }));
-        this.autoScroll();
+        if (currentpage > 1) {
+          this.autoScroll();
+        }
       })
       .finally(() => this.setState({ loading: false }));
   };
